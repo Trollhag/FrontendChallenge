@@ -1,0 +1,13 @@
+<h1>{{ text }}</h1>
+<div class="grid">
+  <mat-form-field appearance="outline">
+    <mat-label>Title</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="YYYY-MM-DD">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
