@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
-body {
-  margin: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html,
@@ -11,7 +13,7 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Open Sauce One", "Helvetica Neue", sans-serif;
 }
 
 .container {

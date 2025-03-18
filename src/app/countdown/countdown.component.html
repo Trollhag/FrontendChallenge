@@ -1,0 +1,17 @@
+@if (displayTitle && displayCountdown) {
+<h1 appAutosizeText>{{ displayTitle }}</h1>
+<h2 appAutosizeText>{{ displayCountdown }}</h2>
+}
+<div class="grid">
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Title</mat-label>
+    <input matInput [formControl]="title">
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Date</mat-label>
+    <input matInput [min]="minDate" [matDatepicker]="picker" (dateInput)="onDateChange($event)" placeholder="YYYY-MM-DD"
+      [value]="selectedDate" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
