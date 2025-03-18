@@ -2,7 +2,7 @@
 
 # FrontendChallenge
 
-This is a code test.
+This is a code test. Demo at: [https://trollhag.github.io/FrontendChallenge/](https://trollhag.github.io/FrontendChallenge/)
 
 ## Setup
 
