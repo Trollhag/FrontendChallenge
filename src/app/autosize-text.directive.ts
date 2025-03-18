@@ -36,7 +36,7 @@ export class AutosizeTextDirective {
     this.el.nativeElement.style.paddingTop = '0px'
     this.el.nativeElement.style.paddingBottom = '0px'
 
-    let fontSize = 1
+    let fontSize = 0
     // Loop until text line breaks. Max out at 10k to prevent infinite looping.
     // By breaking it in to 3 loops, 100, 10, 1, we minimize the number of total iterations.
     // E.g. if the target font size is 270, we'd be doing 271 iterations using one loop, and 7 interations with three loops.
@@ -49,10 +49,10 @@ export class AutosizeTextDirective {
         break;
       }
     }
-    for (let i = 0; i < fontSize / 10; i++) {
+    const second_loop_max = fontSize / 10
+    for (let i = 0; i < second_loop_max; i++) {
       fontSize -= 10
       this.el.nativeElement.style.fontSize = `${fontSize}px`
-
       const height = this.el.nativeElement.clientHeight
       if (height <= fontSize) {
         break;
