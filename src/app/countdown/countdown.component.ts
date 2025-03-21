@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -21,42 +21,44 @@ const DAY_IN_MS = HOUR_IN_MS * 24
   styleUrl: './countdown.component.scss'
 })
 export class CountdownComponent {
+  displayTitle = ''
+  displayCountdown = ''
+
   title = new FormControl('')
-  selectedDate: Moment | null = null
+  datepicker = new FormControl<Moment | null>(null)
   minDate = moment().add(1, 'd')
 
   ngOnInit() {
+    this.title.valueChanges.subscribe(() => this.onTitleChange())
+    this.datepicker.valueChanges.subscribe(() => this.onDateChange())
+
     this.title.setValue(localStorage.getItem('countdown.title') || '')
-    this.title.valueChanges.subscribe(() => {
-      localStorage.setItem('countdown.title', this.title.value ?? '')
-    })
-    this.selectedDate = null
+
     const persistedDate = localStorage.getItem('countdown.date')
     if (persistedDate) {
-      this.selectedDate = moment.unix(parseInt(persistedDate))
+      this.datepicker.setValue(moment.unix(parseInt(persistedDate)))
     }
   }
 
-  get displayTitle() {
-    // Show formated title or no breakspace to keep element line height.
-    return this.title.value ? `Time to ${this.title.value}` : ''
+  onTitleChange() {
+    localStorage.setItem('countdown.title', this.title.value ?? '')
+    this.displayTitle = this.title.value ? `Time to ${this.title.value}` : ''
   }
 
-  get displayCountdown() {
-    if (!this.selectedDate) return ''
-    // Get duration until midnight selected date.
-    const duration = this.selectedDate.diff(moment())
-    const days = Math.floor(duration / DAY_IN_MS)
-    const hours = Math.floor((duration - days * DAY_IN_MS) / HOUR_IN_MS)
-    const minutes = Math.floor((duration - days * DAY_IN_MS - hours * HOUR_IN_MS) / MINUTE_IN_MS)
-    const seconds = Math.floor((duration - days * DAY_IN_MS - hours * HOUR_IN_MS - minutes * MINUTE_IN_MS) / 1000)
+  onDateChange() {
+    localStorage.setItem('countdown.date', String(this.datepicker.value?.unix() ?? ""))
 
-    return `${days} days, ${hours} h, ${minutes}m, ${seconds}s`
-  }
+    if (this.datepicker.value) {
+      // Get duration until midnight selected date.
+      const duration = this.datepicker.value.diff(moment())
+      const days = Math.floor(duration / DAY_IN_MS)
+      const hours = Math.floor((duration - days * DAY_IN_MS) / HOUR_IN_MS)
+      const minutes = Math.floor((duration - days * DAY_IN_MS - hours * HOUR_IN_MS) / MINUTE_IN_MS)
+      const seconds = Math.floor((duration - days * DAY_IN_MS - hours * HOUR_IN_MS - minutes * MINUTE_IN_MS) / 1000)
 
-  onDateChange(event: MatDatepickerInputEvent<Moment>) {
-    localStorage.setItem('countdown.date', String(event.value?.unix() ?? ""))
-    if (!event.value || event.value.unix() === this.selectedDate?.unix()) return
-    this.selectedDate = event.value
+      this.displayCountdown = `${days} days, ${hours} h, ${minutes}m, ${seconds}s`
+    } else {
+      this.displayCountdown = ''
+    }
   }
 }
